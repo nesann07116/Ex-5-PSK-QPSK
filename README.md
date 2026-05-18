@@ -5,13 +5,173 @@ Write a simple Python program for the modulation and demodulation of PSK and QPS
 Google Colab
 ## PROGRAM:
 #### PSK:
+```
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.signal import butter, lfilter
 
+# Low-pass filter
+def lpf(x, fc, fs):
+    b, a = butter(4, fc / (0.5 * fs), 'low')
+    return lfilter(b, a, x)
+
+# Parameters
+fs = 1000      # Sampling frequency
+fc = 50        # Carrier frequency
+br = 10        # Bit rate
+T = 1          # Time duration
+
+t = np.arange(0, T, 1/fs)
+bd = fs // br  # Samples per bit
+
+# Message signal
+bits = np.random.randint(0, 2, br)
+msg = np.repeat(bits, bd)
+
+# Carrier signal
+carrier = np.sin(2 * np.pi * fc * t)
+
+# BPSK Modulation
+# 0 -> 0° phase, 1 -> 180° phase
+bpsk = np.sin(2 * np.pi * fc * t + np.pi * msg)
+
+# Demodulation
+demod = lpf(bpsk * carrier, fc, fs)
+
+# Decode bits
+decoded = (demod[::bd] < 0).astype(int)
+
+# Plotting
+plt.figure(figsize=(10, 9))
+
+plt.suptitle(
+    "NAME: VISHAL D\nREG NO: 212224060305",
+    fontsize=12,
+    fontweight='bold'
+)
+
+# Message Signal
+plt.subplot(4, 1, 1)
+plt.plot(t, msg)
+plt.title("Message Signal")
+plt.grid(True)
+
+# Carrier Signal
+plt.subplot(4, 1, 2)
+plt.plot(t, carrier)
+plt.title("Carrier Signal")
+plt.grid(True)
+
+# BPSK Signal
+plt.subplot(4, 1, 3)
+plt.plot(t, bpsk)
+plt.title("BPSK Modulated Signal")
+plt.grid(True)
+
+# Decoded Bits
+plt.subplot(4, 1, 4)
+plt.step(range(len(decoded)), decoded, where='mid')
+plt.title("Decoded Bits")
+plt.ylim(-0.2, 1.2)
+plt.grid(True)
+
+plt.tight_layout(rect=[0, 0, 1, 0.93])
+plt.show()
+```
 #### QPSK:
 
+```
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Parameters
+fs = 1000      # Sampling frequency
+fc = 10        # Carrier frequency
+T = 1          # Total duration
+
+t = np.arange(0, T, 1/fs)
+
+# Input bit pairs
+bits = np.array([1, 0, 1, 1, 1, 1, 1, 0])
+
+# Group bits into symbols
+symbols = bits.reshape(-1, 2)
+
+# Samples per symbol
+symbol_samples = len(t) // len(symbols)
+
+# QPSK Modulation (I-Q Method)
+qpsk = np.zeros(len(t))
+
+for i, pair in enumerate(symbols):
+
+    # I and Q mapping
+    I = 1 if pair[0] == 1 else -1
+    Q = 1 if pair[1] == 1 else -1
+
+    # Time segment
+    ts = t[i * symbol_samples : (i + 1) * symbol_samples]
+
+    # QPSK signal
+    qpsk[i * symbol_samples : (i + 1) * symbol_samples] = (
+        I * np.cos(2 * np.pi * fc * ts)
+        + Q * np.sin(2 * np.pi * fc * ts)
+    )
+
+# Demodulation
+decoded = []
+
+for i in range(len(symbols)):
+
+    ts = t[i * symbol_samples : (i + 1) * symbol_samples]
+    segment = qpsk[i * symbol_samples : (i + 1) * symbol_samples]
+
+    # Correlator detection
+    I_demod = np.sum(segment * np.cos(2 * np.pi * fc * ts))
+    Q_demod = np.sum(segment * np.sin(2 * np.pi * fc * ts))
+
+    decoded.append(1 if I_demod > 0 else 0)
+    decoded.append(1 if Q_demod > 0 else 0)
+
+# Plotting
+plt.figure(figsize=(10, 8))
+
+plt.suptitle(
+    "NAME: KRITHI.V\nREG NO: 212224060128",
+    fontsize=12,
+    fontweight='bold'
+)
+
+# Input Binary Data
+plt.subplot(3, 1, 1)
+plt.step(range(len(bits)), bits, where='mid')
+plt.title("Input Binary Data")
+plt.ylim(-0.5, 1.5)
+plt.grid(True)
+
+# QPSK Signal
+plt.subplot(3, 1, 2)
+plt.plot(t, qpsk)
+plt.title("QPSK Modulated Signal")
+plt.grid(True)
+
+# Demodulated Output
+plt.subplot(3, 1, 3)
+plt.step(range(len(decoded)), decoded, where='mid')
+plt.title("Demodulated Output")
+plt.ylim(-0.5, 1.5)
+plt.grid(True)
+
+plt.tight_layout(rect=[0, 0, 1, 0.93])
+plt.show()
+```
 ## OUTPUT WAVEFORM:
 #### PSK:
+<img width="978" height="887" alt="image" src="https://github.com/user-attachments/assets/27f114f8-0a5c-454b-bd2b-cf4730380f90" />
 
 #### QPSK:
+<img width="989" height="789" alt="image" src="https://github.com/user-attachments/assets/85599e01-a0cf-4f7f-beb8-98f730cd388c" />
+
 
 ## RESULT:
 The PSK and QPSK signals were successfully modulated and demodulated using Google Colab.
