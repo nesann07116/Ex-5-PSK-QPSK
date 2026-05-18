@@ -45,7 +45,7 @@ decoded = (demod[::bd] < 0).astype(int)
 plt.figure(figsize=(10, 9))
 
 plt.suptitle(
-    "NAME: VISHAL D\nREG NO: 212224060305",
+    "NAME: OTRUMAI NESAN VR\nREG NO: 212224060183",
     fontsize=12,
     fontweight='bold'
 )
@@ -137,7 +137,7 @@ for i in range(len(symbols)):
 plt.figure(figsize=(10, 8))
 
 plt.suptitle(
-    "NAME: KRITHI.V\nREG NO: 212224060128",
+    "NAME: OTRUMAI NESAN VR\nREG NO: 212224060183",
     fontsize=12,
     fontweight='bold'
 )
@@ -167,10 +167,12 @@ plt.show()
 ```
 ## OUTPUT WAVEFORM:
 #### PSK:
-<img width="978" height="887" alt="image" src="https://github.com/user-attachments/assets/27f114f8-0a5c-454b-bd2b-cf4730380f90" />
+<img width="978" height="887" alt="image" src="https://github.com/user-attachments/assets/5c994d6e-c048-4ab1-8b45-1af265aa164a" />
+
 
 #### QPSK:
-<img width="989" height="789" alt="image" src="https://github.com/user-attachments/assets/85599e01-a0cf-4f7f-beb8-98f730cd388c" />
+<img width="989" height="789" alt="image" src="https://github.com/user-attachments/assets/5041e7d5-74f3-4172-9cd0-0f8cac2d3c32" />
+
 
 
 ## RESULT:
